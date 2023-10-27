@@ -1,5 +1,5 @@
 // import styles from '../../../assets/styles/modal.scss'
-
+//for certificate generation 
 // const Modal = ({ isOpen, handleClose, ...props }) => {
 //   return (
 //     <>

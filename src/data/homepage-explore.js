@@ -3,20 +3,20 @@ export const HomePageExplore = [
         tag: 'Free',
         courses : [
             {
-                heading : "Learn HTML",
-                description : "This course covers the basic concepts of HTML including creating and structuring web pages, adding text, links, images, and more.",
+                heading : "Learn App Development",
+                description : "This course covers the basic concepts of App development of making software for smartphones, tablets and digital assistants, most commonly for the Android and iOS ",
                 level : 'Beginner',
                 lessionNumber : 6
             },
             {
-                heading : "Learn CSS",
+                heading : "Learn Web Development",
                 description : "This course explores advanced topics in HTML5 and CSS3, including animations, transitions, and layout techniques",
                 level : 'Beginner',
                 lessionNumber : 6
             },
             {
-                heading : "Responsive Web design",
-                description : "This course teaches responsive web design techniques, allowing web pages to adapt to different devices and screen sizes",
+                heading : "Learn AutoCad",
+                description : "This course teaches Learn AutoCad techniques, allowing to design software to create precise 2D and 3D drawings",
                 level : 'Beginner',
                 lessionNumber : 6
             },

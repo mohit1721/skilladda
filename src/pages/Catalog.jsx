@@ -34,10 +34,11 @@ function Catalog() {
   }, [catalogName])
   useEffect(() => {
     if (categoryId) {
-      ;(async () => {
+      (async () => {
         try {
           const res = await getCatalogPageData(categoryId)
           setCatalogPageData(res)
+          // console.log("catalog data", res)
         } catch (error) {
           console.log(error)
         }
