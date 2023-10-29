@@ -22,6 +22,7 @@ export function sendOtp(email, navigate) {
         const response = await apiConnector("POST", SENDOTP_API, {
             email,
             checkUserPresent: true,
+            
         });
         console.log("SENDOTP API RESPONSE..........", response)
 
@@ -56,47 +57,32 @@ export function sendOtp(email, navigate) {
 }
 
 export function signUp(
-  accountType,
-  firstName,
-  lastName,
-  email,
-  password,
-  confirmPassword,
-  otp,
-  navigate
+  inputData, // Pass an object with all the parameters
+  navigate,
 ) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
-    try{
-        const response = await apiConnector("POST", SIGNUP_API, {
-            accountType,
-            firstName,
-            lastName,
-            email,
-            password,
-            confirmPassword,
-            otp,
-        })
+    try {
+      const response = await apiConnector("POST", SIGNUP_API, inputData);
 
-        console.log("SIGNUP API RESPONSE.............", response)
+      console.log("SIGNUP API RESPONSE.............", response)
 
-        if (!response.data.success) {
-            throw new Error(response.data.message)
-        }
-        toast.success("Signup Successful")
-        navigate("/login")
+      if (!response.data.success) {
+        throw new Error(response.data.message)
+      }
+      toast.success("Signup Successful")
+      navigate("/login")
     } catch (error) {
-        console.log("error with message - ",error.message)
-        console.log("SIGNUP API ERROR............",error)
-        toast.error("Signup Failed")
-        navigate("/signup")
+      console.log("error with message - ", error.message)
+      console.log("SIGNUP API ERROR............", error)
+      toast.error("Signup Failed")
+      navigate("/signup")
     }
     dispatch(setLoading(false))
     toast.dismiss(toastId)
+  }
 }
-}
-
 export function login(email, password, navigate) {
   return async (dispatch) => {
     // const toastId = toast.loading("Loading...")

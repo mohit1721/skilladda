@@ -6,6 +6,7 @@ const otpGenerator = require("otp-generator")
 const mailSender = require("../utils/mailSender")
 const { passwordUpdated } = require("../mail/templates/passwordUpdate")
 const Profile = require("../models/Profile")
+const otpTemplate = require("../mail/templates/emailVerificationTemplate")
 require("dotenv").config()
 
 // Signup Controller for Registering USers
@@ -97,6 +98,7 @@ exports.signup = async (req, res) => {
       approved: approved,
       additionalDetails: profileDetails._id,
       image: "",
+      
     })
 
     return res.status(200).json({
@@ -104,6 +106,9 @@ exports.signup = async (req, res) => {
       user,
       message: "User registered successfully",
     })
+ 
+
+
   } catch (error) {
     console.error(error)
     return res.status(500).json({
@@ -111,6 +116,10 @@ exports.signup = async (req, res) => {
       message: "User cannot be registered. Please try again.",
     })
   }
+
+
+
+
 }
 
 // Login controller for authenticating users
@@ -211,6 +220,7 @@ exports.sendotp = async (req, res) => {
       otp = otpGenerator.generate(6, {
         upperCaseAlphabets: false,
       })
+
     }
     const otpPayload = { email, otp }
     const otpBody = await OTP.create(otpPayload)
@@ -220,10 +230,16 @@ exports.sendotp = async (req, res) => {
       message: `OTP Sent Successfully`,
       otp,
     })
+
+
+
+
   } catch (error) {
     console.log(error.message)
     return res.status(500).json({ success: false, error: error.message })
   }
+
+  
 }
 
 // Controller for Changing Password

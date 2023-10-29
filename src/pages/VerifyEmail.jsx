@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 import { Link } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
@@ -6,15 +6,17 @@ import { RxCountdownTimer } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { sendOtp, signUp } from "../services/operations/authAPI";
 import { useNavigate } from "react-router-dom";
-
+import { ACCOUNT_TYPE } from "../utils/constants";
+import { toast } from "react-hot-toast"
 function VerifyEmail() {
   const [otp, setOtp] = useState("");
+  const [instructorPin, setInstructorPin] = useState("");
   const { signupData, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Only allow access of this route when user has filled the signup form
+    // Only allow access to this route when the user has filled out the signup form
     if (!signupData) {
       navigate("/signup");
     }
@@ -23,28 +25,26 @@ function VerifyEmail() {
 
   const handleVerifyAndSignup = (e) => {
     e.preventDefault();
-    const {
+    const { accountType, firstName, lastName, email, password, confirmPassword } = signupData;
+  
+    if (accountType === ACCOUNT_TYPE.INSTRUCTOR && instructorPin !== "t34t67b") {
+      toast.error("Invalid instructor PIN. Please enter the correct PIN.");
+      return;
+    }
+  
+    const inputData = {
       accountType,
       firstName,
       lastName,
       email,
       password,
       confirmPassword,
-    } = signupData;
-
-    dispatch(
-      signUp(
-        accountType,
-        firstName,
-        lastName,
-        email,
-        password,
-        confirmPassword,
-        otp,
-        navigate
-      )
-    );
-  };
+      otp,
+      instructorPin: accountType === ACCOUNT_TYPE.INSTRUCTOR ? instructorPin : null,
+    };
+  
+    dispatch(signUp(inputData, navigate)); // Pass 'navigate' here.
+  }
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] grid place-items-center">
@@ -80,22 +80,33 @@ function VerifyEmail() {
                 gap: "0 6px",
               }}
             />
+
+            {signupData?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
+              <input
+                type="text"
+                placeholder="Instructor PIN"
+                value={instructorPin}
+                onChange={(e) => setInstructorPin(e.target.value)}
+                className="w-full bg-richblack-800 rounded-[0.5rem] text-richblack-5 mt-4 px-3 py-2"
+              />
+            )}
+
             <button
               type="submit"
-              className="w-full bg-yellow-50 py-[12px] px-[12px] rounded-[8px] mt-6 font-medium text-richblack-900"
+              className="w-full bg-yellow-50 py-[12px] px-[12px] rounded-[8px] mt-4 font-medium text-richblack-900"
             >
               Verify Email
             </button>
           </form>
-          <div className="mt-6 flex items-center justify-between">
+          <div className="mt-6 flex items-center justify between">
             <Link to="/signup">
-              <p className="text-richblack-5 flex items-center gap-x-2">
+              <p className="text-richblack-5 flex items-center gap-x-2 mr-4">
                 <BiArrowBack /> Back To Signup
               </p>
             </Link>
             <button
               className="flex items-center text-blue-100 gap-x-2"
-              onClick={() => dispatch(sendOtp(signupData.email))}
+              onClick={() => dispatch(sendOtp(signupData.email))} 
             >
               <RxCountdownTimer />
               Resend it

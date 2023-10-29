@@ -67,8 +67,7 @@ export default function CoursesTable({ courses, setCourses }) {
                 {/* TODO: Need to change this state */}
                  
                  
-                  
-
+          
 
 
 
@@ -163,7 +162,13 @@ export default function CoursesTable({ courses, setCourses }) {
             ))
           )}
         </Tbody>
+
+
       </Table>
+
+
+
+      
       {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}
     </>
   )

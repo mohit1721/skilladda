@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai";
 import { BsChevronDown } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { Link, matchPath, useLocation } from "react-router-dom";
-
+import NavbarMobile from "./NavbarMobile";
 import logo from "../../assets/Logo/logo-no-background.png";
 import { NavbarLinks } from "../../data/navbar-links";
 import { apiConnector } from "../../services/apiConnector";
 import { categories } from "../../services/apis";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import ProfileDropdown from "../core/Auth/ProfileDropdown";
-
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 function Navbar() {
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.profile);
@@ -21,7 +21,7 @@ function Navbar() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       setLoading(true);
       try {
         const res = await apiConnector("GET", categories.CATEGORIES_API);
@@ -33,9 +33,14 @@ function Navbar() {
     })();
   }, []);
 
+  
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname);
   }
+//Mobile navbar
+const [isOpen, setIsOpen] = useState(false);
+const ref = useRef (null);
+useOnClickOutside(ref , () => setIsOpen(false));
 
   return (
     <div
@@ -140,9 +145,19 @@ function Navbar() {
           )}
           {token !== null && <ProfileDropdown />}
         </div>
-        <button className="mr-4 md:hidden">
-          <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
-        </button>
+
+    {/* Mobile navabr */}
+        <nav
+        className="md:hidden"
+        >
+          <NavbarMobile
+            loading={loading}
+            subLinks={subLinks}
+            matchRoute={matchRoute}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          />
+        </nav>
       </div>
     </div>
   );
