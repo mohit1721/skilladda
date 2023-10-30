@@ -66,7 +66,16 @@ const userSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "courseProgress",
       },
+      
     ],
+    refId: {
+      type:mongoose.Schema.Types.ObjectId,
+      ref: "referral",
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
 
     // Add timestamps for when the document is created and last modified
   },
